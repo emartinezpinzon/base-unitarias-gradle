@@ -1,0 +1,73 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.1'
+	id 'io.spring.dependency-management' version '1.1.5'
+	id 'jacoco'
+	id 'info.solidsoft.pitest' version '1.9.11'
+}
+
+group = 'com.pelicula'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.pitest:pitest-junit5-plugin:1.2.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+tasks.jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+
+	reports {
+		xml.required.set(true)
+		html.required.set(true)
+	}
+}
+
+pitest {
+	pitestVersion = '1.9.11'
+	threads = 4
+	outputFormats = ['XML', 'HTML']
+	timestampedReports = false
+	targetClasses = ['com.pelicula.*']
+	targetTests = ['com.pelicula.*']
+	mutators = ['ALL']
+	excludedClasses = ['com.pelicula.PeliculaApplication.Application']
+	avoidCallsTo = ['kotlin.jvm.internal']
+	verbose = true
+	failWhenNoMutations = false
+	testPlugin = 'junit5'
+}
+
+tasks.check {
+	dependsOn tasks.jacocoTestReport
+}
