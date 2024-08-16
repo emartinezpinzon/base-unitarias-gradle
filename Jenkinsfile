@@ -51,6 +51,13 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                echo "------------>Build<------------"
+                sh './gradlew --b ./build.gradle test'
+            }
+        }
+
         stage('Publish JaCoCo Report') {
             steps {
                 // Publish the JaCoCo report
@@ -81,12 +88,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                echo "------------>Build<------------"
-                sh './gradlew --b ./build.gradle test'
-            }
-        }
+
     }
 
     post {
