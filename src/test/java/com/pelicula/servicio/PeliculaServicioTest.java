@@ -41,7 +41,7 @@ class PeliculaServicioTest {
         verify(peliculaRepositorio, times(1)).findAll();
     }
 
-/*    @Test
+    @Test
     public void testObtenerListaDePeliculasConTitulo() {
         List<Pelicula> peliculas = new ArrayList<>();
         peliculas.add(new Pelicula("Inception", "Descripción de Inception", "Ciencia Ficción"));
@@ -80,7 +80,7 @@ class PeliculaServicioTest {
     @Test
     public void testActualizarPeliculaExistente() {
         Pelicula peliculaExistente = new Pelicula("Inception", "Descripción de Inception", "Ciencia Ficción");
-        Pelicula peliculaNueva = new Pelicula("Inception Updated", "Descripción Actualizada", "Ciencia Ficción");
+        Pelicula peliculaNueva = new Pelicula("Inception Updated", "Descripción Actualizada", "Genero Actualizado");
 
         when(peliculaRepositorio.findById(1L)).thenReturn(Optional.of(peliculaExistente));
         when(peliculaRepositorio.save(any(Pelicula.class))).thenReturn(peliculaExistente);
@@ -89,9 +89,11 @@ class PeliculaServicioTest {
 
         assertTrue(resultado.isPresent());
         assertEquals("Inception Updated", resultado.get().getTitulo());
+        assertEquals("Descripción Actualizada", resultado.get().getDescripcion());
+        assertEquals("Genero Actualizado", resultado.get().getGenero());
         verify(peliculaRepositorio, times(1)).findById(1L);
         verify(peliculaRepositorio, times(1)).save(any(Pelicula.class));
-    }*/
+    }
 
     @Test
     public void testActualizarPeliculaNoExistente() {
